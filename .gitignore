@@ -6,5 +6,5 @@
 /.venv/
 !*.gitkeep
 /.idea/
-WBSIA/.env
+TrabalhoNLP/.env
 
