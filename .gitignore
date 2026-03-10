@@ -1,0 +1,9 @@
+.
+.pyc
+.vscode/
+.run/*
+/venv/
+/.venv/
+!*.gitkeep
+/.idea/
+WBSIA/.env
