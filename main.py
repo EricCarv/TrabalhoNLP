@@ -9,5 +9,5 @@ from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
-
+df = pd.read_csv('pre-processed.csv')
 nltk.download("all")
