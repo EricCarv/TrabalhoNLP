@@ -67,29 +67,41 @@ df_resultados = pd.DataFrame({
 textos_verdade = " ".join(df_resultados[df_resultados['previsao'] == 'true']['texto'])
 textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto'])
 
-mascara_positiva = np.array(Image.open('thumbsup-svgrepo-com.png'))
-mascara_negativa = np.array(Image.open('dull-mad-angry-emoji-emoticon-svgrepo-com.png'))
+mascara_positiva = np.array(Image.open('thumbsup-svgrepo-com1.png').convert("L"))
+mascara_negativa = np.array(Image.open('dull-mad-angry-emoji-emoticon-svgrepo-com1.png').convert("L"))
+
+
+plt.imshow(mascara_positiva, cmap='gray')
+plt.title("Máscara usada na WordCloud")
+plt.show()
+
+print(f"Shape da máscara: {mascara_positiva.shape}")
+print(f"Pixels únicos na máscara: {np.unique(mascara_positiva)}")
+
 wordcloud_positiva = WordCloud(
-    width=800,
-    height=400,
+    background_color='black',
+    width=1024,
+    height=1024,
     mask=mascara_positiva,
     contour_width=3,
     contour_color='lightgreen',
     colormap='winter',
-    max_words=100,
+    max_words=150,
 ).generate(textos_verdade)
 
 wordcloud_negativa = WordCloud(
-    width=800,
-    height=400,
+    background_color='black',
+    width=1024,
+    height=1024,
     mask=mascara_negativa,
     contour_width=3,
-    contour_color='lightred',
+    contour_color='firebrick',
     colormap='autumn',
-    max_words=100,
-).generate(textos_verdade)
+    max_words=150,
+).generate(textos_fake)
 
 plt.figure(figsize= (15,10))
+plt.title("teste titulo", fontsize=24, pad=20)
 plt.imshow(wordcloud_positiva, interpolation= 'bilinear')
 plt.axis('off')
 plt.savefig("wordcloud_positiva.png")
