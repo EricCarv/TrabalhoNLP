@@ -38,7 +38,7 @@ print(df.head())
 print("iniciou regressão / TFIDF\n")
 menor_tipo=df['label'].value_counts().min()
 df_falso = df[df['label']== 'fake'].sample(n=menor_tipo, random_state=42)
-df_real = df[df['label']== 'real'].sample(n=menor_tipo, random_state=42)
+df_real = df[df['label']== 'true'].sample(n=menor_tipo, random_state=42)
 df_balanceado = pd.concat([df_falso,df_real])
 
 tfidf = TfidfVectorizer(ngram_range=(1, 3))
