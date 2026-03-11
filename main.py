@@ -45,7 +45,7 @@ tfidf = TfidfVectorizer(ngram_range=(1, 3))
 x = tfidf.fit_transform(df_balanceado['preprocessed_news'])
 y = df_balanceado['label']
 
-X_treino, X_teste, Y_treino, Y_teste = train_test_split(x , y, test_size=0.25, random_state=42)
+X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df['preprocessed_news'], test_size=0.25, random_state=42)
 
 regressao = LogisticRegression(solver='lbfgs', max_iter=1000)
 regressao.fit(X_treino, Y_treino)
@@ -57,3 +57,25 @@ precisao = accuracy_score (Y_teste, label_pred)
 print(f"Resultado da regressão")
 print(f"Precisão geral do modelo : {precisao:.4f}")
 print(f"Exemplos Probabilidade (Fake , Real):\n{prob_pred[:5]}")
+
+df_resultados = pd.DataFrame({
+    'texto': texto_teste,
+    'previsao': label_pred
+})
+
+textos_verdade = " ".join(df_resultados[df_resultados['previsao'] == 'true']['texto'])
+textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto'])
+
+wordcloud_positiva = WordCloud(
+    width=800,
+    height=400,
+    background_color='white',
+    colormap='winter',
+    max_words=100,
+).generate(textos_verdade)
+
+plt.figure(figsize= (15,10))
+plt.imshow(wordcloud_positiva, interpolation= 'bilinear')
+plt.axis('off')
+plt.savefig("wordcloud_positiva.png")
+plt.show()
