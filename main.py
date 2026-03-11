@@ -38,17 +38,17 @@ print("terminou limpeza")
 print(df.head())
 print("iniciou regressão / TFIDF\n")
 menor_tipo=df['label'].value_counts().min()
-df_falso = df[df['label']== 'fake'].sample(n=menor_tipo, random_state=42)
-df_real = df[df['label']== 'true'].sample(n=menor_tipo, random_state=42)
+df_falso = df[df['label']== 'fake'].sample(n=menor_tipo, random_state=50)
+df_real = df[df['label']== 'true'].sample(n=menor_tipo, random_state=50)
 df_balanceado = pd.concat([df_falso,df_real])
 
 tfidf = TfidfVectorizer(ngram_range=(1, 3))
 x = tfidf.fit_transform(df_balanceado['preprocessed_news'])
 y = df_balanceado['label']
 
-X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df['preprocessed_news'], test_size=0.25, random_state=42)
+X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df['preprocessed_news'], test_size=0.25, random_state=50)
 
-regressao = LogisticRegression(solver='lbfgs', max_iter=1000)
+regressao = LogisticRegression(solver='lbfgs', max_iter=2000)
 regressao.fit(X_treino, Y_treino)
 
 prob_pred = regressao.predict_proba(X_teste)
