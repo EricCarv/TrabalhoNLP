@@ -23,7 +23,7 @@ def limpeza_dataframe(texto):
     texto = texto.lower()
     texto = unicodedata.normalize('NFKD', texto).encode('ascii', 'ignore').decode('utf-8')
     texto = re.sub(r'\d+', '',texto)
-    texto = re.sub(r'[\w\s]', '',texto)
+    texto = re.sub(r'[^\w\s]', '',texto)
     tokens = nltk.word_tokenize(texto)
     print(f"Após Tokenizar: {tokens[:5]}")
     paradas = set(stopwords.words('portuguese'))
