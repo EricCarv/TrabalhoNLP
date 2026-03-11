@@ -4,6 +4,7 @@ import unicodedata
 import re
 import matplotlib.pyplot as plt
 import nltk
+from PIL import Image
 from nltk.corpus import stopwords
 from sklearn.linear_model import LogisticRegression
 from wordcloud import WordCloud, ImageColorGenerator
@@ -66,11 +67,21 @@ df_resultados = pd.DataFrame({
 textos_verdade = " ".join(df_resultados[df_resultados['previsao'] == 'true']['texto'])
 textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto'])
 
+mascara_positiva = np.array(Image.open)
+
 wordcloud_positiva = WordCloud(
     width=800,
     height=400,
     background_color='white',
     colormap='winter',
+    max_words=100,
+).generate(textos_verdade)
+
+wordcloud_negativa = WordCloud(
+    width=800,
+    height=400,
+    background_color='white',
+    colormap='autuum',
     max_words=100,
 ).generate(textos_verdade)
 
