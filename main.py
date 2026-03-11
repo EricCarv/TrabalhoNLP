@@ -67,12 +67,14 @@ df_resultados = pd.DataFrame({
 textos_verdade = " ".join(df_resultados[df_resultados['previsao'] == 'true']['texto'])
 textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto'])
 
-mascara_positiva = np.array(Image.open)
-
+mascara_positiva = np.array(Image.open('thumbsup-svgrepo-com.png'))
+mascara_negativa = np.array(Image.open('dull-mad-angry-emoji-emoticon-svgrepo-com.png'))
 wordcloud_positiva = WordCloud(
     width=800,
     height=400,
-    background_color='white',
+    mask=mascara_positiva,
+    contour_width=3,
+    contour_color='lightgreen',
     colormap='winter',
     max_words=100,
 ).generate(textos_verdade)
@@ -80,8 +82,10 @@ wordcloud_positiva = WordCloud(
 wordcloud_negativa = WordCloud(
     width=800,
     height=400,
-    background_color='white',
-    colormap='autuum',
+    mask=mascara_negativa,
+    contour_width=3,
+    contour_color='lightred',
+    colormap='autumn',
     max_words=100,
 ).generate(textos_verdade)
 
@@ -89,4 +93,10 @@ plt.figure(figsize= (15,10))
 plt.imshow(wordcloud_positiva, interpolation= 'bilinear')
 plt.axis('off')
 plt.savefig("wordcloud_positiva.png")
+plt.show()
+
+plt.figure(figsize= (15,10))
+plt.imshow(wordcloud_negativa, interpolation= 'bilinear')
+plt.axis('off')
+plt.savefig("wordcloud_negativa.png")
 plt.show()
