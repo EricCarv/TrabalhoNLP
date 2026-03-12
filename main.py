@@ -20,6 +20,12 @@ df = pd.read_csv('pre-processed.csv')
 paradas = set(stopwords.words('portuguese'))
 stemmer = RSLPStemmer()
 
+def contar_ngramas(texto,n):
+    vectorizer = CountVectorizer(ngram_range=(n, n))
+    X = vectorizer.fit_transform(texto)
+    return len(vectorizer.get_feature_names_out())
+
+
 def limpeza_dataframe(texto):
     if not isinstance(texto, str) or texto == "":
         return ""
@@ -32,6 +38,7 @@ def limpeza_dataframe(texto):
     tokens = [stemmer.stem(t) for t in tokens]
     resultado = " ".join(tokens)
     return resultado
+
 print("iniciou limpeza")
 df['preprocessed_news'] = df['preprocessed_news'].apply(limpeza_dataframe)
 print("terminou limpeza")
@@ -48,6 +55,18 @@ y = df_balanceado['label']
 
 X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df_balanceado['preprocessed_news'], test_size=0.25, random_state=50)
 
+texto_treino_real = texto_treino[Y_treino == 'true']
+texto_treino_falso = texto_treino[Y_treino == 'fake']
+
+qtd_palavras_real = contar_ngramas(texto_treino_real,1)
+qtd_bigramas_real = contar_ngramas(texto_treino_real, 2)
+qtd_trigramas_real = contar_ngramas(texto_treino_real, 3)
+
+qtd_palavras_fake = contar_ngramas(texto_treino_falso,1)
+qtd_bigramas_fake = contar_ngramas(texto_treino_falso, 2)
+qtd_trigramas_fake = contar_ngramas(texto_treino_falso, 3)
+
+
 regressao = LogisticRegression(solver='lbfgs', max_iter=2000)
 regressao.fit(X_treino, Y_treino)
 
@@ -55,9 +74,16 @@ prob_pred = regressao.predict_proba(X_teste)
 label_pred = regressao.predict(X_teste)
 precisao = accuracy_score (Y_teste, label_pred)
 
+print(f"Quantidade de Palavras | Bigramas | Trigramas com label REAL utilizados pelo modelo")
+print(f"Palavras: {qtd_palavras_real} | Bigramas: {qtd_bigramas_real} | Trigramas: {qtd_trigramas_real} \n")
+print(f"Quantidade de Palavras | Bigramas | Trigramas com label FAKE utilizados pelo modelo")
+print(f"Palavras: {qtd_palavras_fake} | Bigramas: {qtd_bigramas_fake} | Trigramas: {qtd_trigramas_fake} \n")
+
+
 print(f"Resultado da regressão")
 print(f"Precisão geral do modelo : {precisao:.4f}")
 print(f"Exemplos Probabilidade (Fake , Real):\n{prob_pred[:5]}")
+
 
 df_resultados = pd.DataFrame({
     'texto': texto_teste,
@@ -70,8 +96,6 @@ textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto
 mascara_positiva = np.array(Image.open('thumbsup-svgrepo-com1.png').convert("L"))
 mascara_negativa = np.array(Image.open('dull-mad-angry-emoji-emoticon-svgrepo-com1.png').convert("L"))
 
-print(f"Shape da máscara: {mascara_positiva.shape}")
-print(f"Pixels únicos na máscara: {np.unique(mascara_positiva)}")
 
 wordcloud_positiva = WordCloud(
     background_color='black',
