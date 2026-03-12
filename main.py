@@ -17,6 +17,8 @@ from sklearn.metrics import accuracy_score
 df = pd.read_csv('pre-processed.csv')
 #nltk.download("all")
 #print(df.head())
+paradas = set(stopwords.words('portuguese'))
+stemmer = RSLPStemmer()
 
 def limpeza_dataframe(texto):
     if not isinstance(texto, str) or texto == "":
@@ -26,9 +28,7 @@ def limpeza_dataframe(texto):
     texto = re.sub(r'\d+', '',texto)
     texto = re.sub(r'[^\w\s]', '',texto)
     tokens = nltk.word_tokenize(texto)
-    paradas = set(stopwords.words('portuguese'))
     tokens = [t for t in tokens if t not in paradas]
-    stemmer = RSLPStemmer()
     tokens = [stemmer.stem(t) for t in tokens]
     resultado = " ".join(tokens)
     return resultado
@@ -46,7 +46,7 @@ tfidf = TfidfVectorizer(ngram_range=(1, 3))
 x = tfidf.fit_transform(df_balanceado['preprocessed_news'])
 y = df_balanceado['label']
 
-X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df['preprocessed_news'], test_size=0.25, random_state=50)
+X_treino, X_teste, Y_treino, Y_teste, texto_treino, texto_teste = train_test_split(x , y, df_balanceado['preprocessed_news'], test_size=0.25, random_state=50)
 
 regressao = LogisticRegression(solver='lbfgs', max_iter=2000)
 regressao.fit(X_treino, Y_treino)
