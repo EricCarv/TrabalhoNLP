@@ -11,9 +11,9 @@ from wordcloud import WordCloud, ImageColorGenerator
 from nltk import ngrams, RSLPStemmer
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-from sklearn.svm import SVC
 from sklearn.metrics import accuracy_score
 
+RU = 3602977
 df = pd.read_csv('pre-processed.csv')
 #nltk.download("all")
 #print(df.head())
@@ -78,8 +78,6 @@ print(f"Quantidade de Palavras | Bigramas | Trigramas com label REAL utilizados 
 print(f"Palavras: {qtd_palavras_real} | Bigramas: {qtd_bigramas_real} | Trigramas: {qtd_trigramas_real} \n")
 print(f"Quantidade de Palavras | Bigramas | Trigramas com label FAKE utilizados pelo modelo")
 print(f"Palavras: {qtd_palavras_fake} | Bigramas: {qtd_bigramas_fake} | Trigramas: {qtd_trigramas_fake} \n")
-
-
 print(f"Resultado da regressão")
 print(f"Precisão geral do modelo : {precisao:.4f}")
 print(f"Exemplos Probabilidade (Fake , Real):\n{prob_pred[:5]}")
