@@ -70,11 +70,6 @@ textos_fake = " ".join(df_resultados[df_resultados['previsao'] == 'fake']['texto
 mascara_positiva = np.array(Image.open('thumbsup-svgrepo-com1.png').convert("L"))
 mascara_negativa = np.array(Image.open('dull-mad-angry-emoji-emoticon-svgrepo-com1.png').convert("L"))
 
-
-plt.imshow(mascara_positiva, cmap='gray')
-plt.title("Máscara usada na WordCloud")
-plt.show()
-
 print(f"Shape da máscara: {mascara_positiva.shape}")
 print(f"Pixels únicos na máscara: {np.unique(mascara_positiva)}")
 
@@ -101,13 +96,14 @@ wordcloud_negativa = WordCloud(
 ).generate(textos_fake)
 
 plt.figure(figsize= (15,10))
-plt.title("teste titulo", fontsize=24, pad=20)
+plt.title("RU : 3602977 ", fontsize=24, pad=20, color='#0011f6')
 plt.imshow(wordcloud_positiva, interpolation= 'bilinear')
 plt.axis('off')
 plt.savefig("wordcloud_positiva.png")
 plt.show()
 
 plt.figure(figsize= (15,10))
+plt.title("RU : 3602977 ", fontsize=24, pad=20, color= '#ff1000')
 plt.imshow(wordcloud_negativa, interpolation= 'bilinear')
 plt.axis('off')
 plt.savefig("wordcloud_negativa.png")
